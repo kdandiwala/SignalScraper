@@ -10,7 +10,7 @@ from os.path import exists
 warnings.filterwarnings("ignore",  message = "executable_path has been deprecated, please pass in a Service object")
 
 # upload/download variables
-downloads = Path("/Users/krish/Desktop/project")
+downloads = Path("INSERT DOWNLOAD PATH HERE")
 
 # Chrome options for headless version
 chrome_options = webdriver.ChromeOptions()
@@ -20,7 +20,7 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--mute-audio")
 chrome_prefs = {"download.default_directory": str(downloads)}
 chrome_options.experimental_options["prefs"] = chrome_prefs
-driver = webdriver.Chrome('/Users/krish/bin/chromedriver',  options=chrome_options)
+driver = webdriver.Chrome('INSERT CHROMEDRIVER PATH HERE',  options=chrome_options)
 original_window = driver.current_window_handle
 
 categories = {
