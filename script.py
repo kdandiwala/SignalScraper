@@ -5,12 +5,12 @@ import time
 import glob
 import warnings
 import sys
-
+from os.path import exists
 
 warnings.filterwarnings("ignore",  message = "executable_path has been deprecated, please pass in a Service object")
 
 # upload/download variables
-downloads = Path("INSERT DOWNLOAD PATH HERE")
+downloads = Path("/Users/krish/Desktop/project")
 
 # Chrome options for headless version
 chrome_options = webdriver.ChromeOptions()
@@ -20,7 +20,7 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--mute-audio")
 chrome_prefs = {"download.default_directory": str(downloads)}
 chrome_options.experimental_options["prefs"] = chrome_prefs
-driver = webdriver.Chrome('INSERT CHROMEDRIVER PATH HERE',  options=chrome_options)
+driver = webdriver.Chrome('/Users/krish/bin/chromedriver',  options=chrome_options)
 original_window = driver.current_window_handle
 
 categories = {
@@ -69,6 +69,9 @@ def create_signal_folder(xpath, parent_directory):
             signal = signal.replace('/', '-')
         print("Downloading signal: " + signal)
         signal_folder_path = os.path.join(parent_directory, signal)
+        if exists(signal_folder_path):
+            signal = signal + '_2'
+            signal_folder_path = os.path.join(parent_directory, signal)
         os.mkdir(signal_folder_path)
         return signal_folder_path
     except Exception as ex:
@@ -99,12 +102,21 @@ def num_rows_cols(table):
         driver.quit()
         sys.exit(1)
 
+def is_download_finished():
+    dl_wait = True
+    while dl_wait:
+        dl_wait = False
+        for fname in os.listdir(str(downloads)):
+            if fname.endswith('.crdownload'):
+                dl_wait = True
+    return True
+
 def download_audio(row, table):
     try:
         audio_html = driver.find_element("xpath",
             '//*[@id="mw-content-text"]/'+table+'/tbody/tr['+str(row)+']/td[8]').get_attribute('innerHTML')
 
-        if audio_html == '—':
+        if (audio_html == '—') or (audio_html == 'No Audio File') or (audio_html == 'Html5mediator: file extension not recognized'):
             return ''
         index1 = audio_html.find('"')
         audio_html = audio_html[index1+1:len(audio_html)]
@@ -127,10 +139,12 @@ def download_audio(row, table):
             aLink.remove();
         ''')
         time.sleep(0.5)
-        driver.close()
-        driver.switch_to.window(original_window)
-        audio_name = get_file_name()
-        return audio_name
+        if is_download_finished():
+            driver.close()
+            driver.switch_to.window(original_window)
+            audio_name = get_file_name()
+            return audio_name
+
     except Exception as ex:
         print("Error when downloading: " + str(ex))
         driver.quit()
@@ -204,10 +218,10 @@ def main():
         driver.get(url)
         parent = create_signal_type_folder()
         rows, cols = num_rows_cols(table)
-        for r in range(2, 6):
+        for r in range(2, rows):
             audio_name = download_audio(r, table)
             if audio_name == '':
-                time.sleep(1)
+                time.sleep(0.2)
                 signal = driver.find_element("xpath", '//*[@id="mw-content-text"]/'+table+'/tbody/tr['+str(r)+']/td[1]').text
                 print("Download for " + signal + " skipped -- no audio file available")
                 continue
