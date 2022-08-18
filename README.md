@@ -25,7 +25,7 @@ Once you download the executable appropriate for your operating system, extract 
 driver = webdriver.Chrome('INSERT CHROMEDRIVER PATH HERE',  options=chrome_options)
 ```
 
-If an error like “chromedriver cannot be opened because the developer cannot be verified" is recieved for MacOS:
+If the error `chromedriver cannot be opened because the developer cannot be verified` is recieved for MacOS:
 1. Open the terminal
 2. Navigate to path where your chromedriver file is located
 3. Execute ```xattr -d com.apple.quarantine chromedriver```
