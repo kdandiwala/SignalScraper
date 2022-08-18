@@ -10,7 +10,7 @@ Setting up Selenium requires two components: the Selenium Python package and the
 To download the Selenium package, execute the pip command in your terminal:
 
 ```shell Tab A
-pip install selenium 
+pip3 install selenium 
 ```
 
 ### Selenium Drivers
