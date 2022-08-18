@@ -19,11 +19,16 @@ This script requires a Chromedriver. Verify the version of your Chrome installed
 
 Download the Chromedriver for your specific OS and Chrome version from [here](https://chromedriver.chromium.org/downloads).
 
-Once you download the executable appropriate for your operating system, extract it and place it in a folder. Take a note of the folder path and add it to the script by inserting the path into the line shown below (line 23):
+Once you download the executable appropriate for your operating system, extract it and place it in a folder. Take a note of the folder path and insert the path into the line shown below (line 23):
 
 ```python
 driver = webdriver.Chrome('INSERT CHROMEDRIVER PATH HERE',  options=chrome_options)
 ```
+
+If an error like “chromedriver cannot be opened because the developer cannot be verified" is recieved for MacOS:
+1. Open the terminal
+2. Navigate to path where your chromedriver file is located
+3. Execute ```xattr -d com.apple.quarantine chromedriver```
 
 ### Download Folder
 
@@ -32,5 +37,3 @@ Note the path of the desired download location for the signals and insert it int
 ```python
 downloads = Path("INSERT DOWNLOAD PATH HERE")
 ```
-
-
