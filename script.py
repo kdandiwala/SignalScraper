@@ -212,7 +212,7 @@ def main():
                 print("Download for " + signal + " skipped -- no audio file available")
                 continue
             folder = create_signal_folder('//*[@id="mw-content-text"]/'+table+'/tbody/tr['+str(r)+']/td[1]', parent)
-            os.replace('/Users/krish/Desktop/project/' + audio_name, folder + '/' + audio_name)
+            os.replace(str(downloads) + '/' + audio_name, folder + '/' + audio_name)
         print("Finished")
     except Exception as ex:
         print("Error in main: " + str(ex))
